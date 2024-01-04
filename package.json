@@ -1,0 +1,17 @@
+{
+  "name": "doer",
+  "version": "1.0.0",
+  "description": "Keep track of tasks with custom folders and notes - Create, read, update, and delete tasks - View all projects - View all tasks within a project - Utilize the Web Storage API for data persistence",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "updateLivePreview": "git subtree push --prefix dist origin gh-pages"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "html-webpack-plugin": "^5.6.0",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
+  }
+}
