@@ -1,4 +1,4 @@
-# DOER: A productivity app
+# DOER: A productivity app 📝
 Keep track of tasks with custom folders and notes
 - Create, read, update, and delete tasks
 - View all projects
