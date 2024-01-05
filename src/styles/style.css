@@ -1,3 +1,32 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+#content {
+    height: 100vh;
+    width: 100vw;
+    display: grid;
+    grid-template: 1fr 7fr / 1fr 5fr;
+}
+
+.header {
+    grid-column: 1 / -1;
+    margin-left: 2.75rem;
+    align-self: center;
+}
+
+.sidebar {
+    grid-row: 2 / -1;
+}
+
+.menu {
+    height: 100%;
+}
+
+.new-task-button {
+    margin: auto auto;
+}
+
+.display {
+    background-color: blue;
+}
