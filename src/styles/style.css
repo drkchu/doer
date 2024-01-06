@@ -29,7 +29,7 @@
     margin: auto auto;
 }
 
-.display {
+#display {
     overflow: scroll;
     height: 100%;
 }
@@ -41,6 +41,19 @@
     height: 3rem;
     justify-content: space-between;
     padding: 0 1.5rem;
+}
+
+/* These next three classes are since tailwind was being weird, so handling manually */
+.low {
+    border-left-color: rgb(22 101 52);
+}
+
+.medium {
+    border-left-color: rgb(133 77 14);
+}
+
+.high {
+    border-left-color: rgb(153 27 27);
 }
 
 .task:hover {
@@ -70,6 +83,10 @@
 .time-display {
     width: 8rem;
     text-align: center;
+}
+
+.details-button:hover {
+    background-color: green;
 }
 
 /* When there's no tasks to display */

@@ -3,6 +3,8 @@ import { compareAsc, format } from "date-fns";
 export const taskManager = (function() {
     const allTasks = [];
 
+    let currentDisplay = 'all'; // default to displaying all tasks from the start
+
     class Task {
         constructor(title, description, project, dueDate, priority, checked = false) {
             this.title = title;
@@ -27,8 +29,32 @@ export const taskManager = (function() {
         createNewTask('Review 3D integrals', 'Chapter 18', 'School', new Date(2024, 0, 12), 'medium', true);
         createNewTask('Clean kitchen', 'Oven needs a thorough cleaning', '', new Date(2024, 0, 10), 'high', false);
     }
+    
+    function getCurrentDisplay() {
+        return currentDisplay;
+    }
 
-    return { generateDefaultTasks, createNewTask, getAllTasks};
+    function setCurrentDisplay(newDisplay) {
+        currentDisplay = newDisplay;
+    }
+
+    // Returns a boolean based on whether or not the current task is active and should be displayed
+    function isActive(task) {
+        switch (currentDisplay) {
+            case 'all':
+                return true;
+            case 'today':
+                return // implement later
+            case 'week':
+                return // implement later
+            case 'month':
+                return // implement later
+            default:
+                return // this is a project, so filter based on the projects with the name
+        }
+    }
+
+    return { generateDefaultTasks, createNewTask, getAllTasks, getCurrentDisplay, setCurrentDisplay, isActive };
 
 })();
 
@@ -41,9 +67,7 @@ export const domManager = (function() {
         const taskDiv = document.createElement('div');
         taskDiv.classList.add('task',
         'border-l-4',
-        task.priority === 'high' ? 'border-l-red-800' :
-            task.priority === 'medium' ? 'border-l-yellow-800' :
-                'border-l-green-800');
+        task.priority);
         
         const taskInfoLeftDiv = document.createElement('div');
         taskInfoLeftDiv.classList.add('task-info-left');
@@ -63,7 +87,7 @@ export const domManager = (function() {
         taskInfoRightDiv.classList.add('task-info-right');
 
         const detailsButton = document.createElement('button');
-        detailsButton.classList.add('btn', 'btn-sm', 'border-green-500', 'btn-outline');
+        detailsButton.classList.add('details-button', 'btn', 'btn-sm', 'border-green-500', 'btn-outline');
         detailsButton.textContent = 'DETAILS';
 
         const timeDisplaySpan = document.createElement('span');
@@ -87,8 +111,8 @@ export const domManager = (function() {
         return taskDiv;
     }
 
-    function displayTasks(tasks) {
-        const taskDisplay = document.querySelector('.display');
+    function displayTasks(tasks, taskManager) {
+        const taskDisplay = document.querySelector('#display');
         resetContainer(taskDisplay);
         if (tasks.length === 0) {
             const emptyTaskDiv = document.createElement('div');
@@ -97,7 +121,7 @@ export const domManager = (function() {
             taskDisplay.appendChild(emptyTaskDiv);
             return;
         }
-        tasks.forEach(task => {
+        tasks.forEach((task) => {
             var newTask = generateTaskElement(task);
             taskDisplay.appendChild(newTask);
         });

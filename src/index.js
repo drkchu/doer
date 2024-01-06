@@ -4,6 +4,8 @@ import './styles/style.css';
 import {taskManager, domManager} from './taskFunctions.js';
 
  
-taskManager.generateDefaultTasks();
+taskManager.generateDefaultTasks(); // generate
+domManager.displayTasks(taskManager.getAllTasks()); // display
 
-domManager.displayTasks(taskManager.getAllTasks());
+// Initial linking of buttons to the current active tasks
+
