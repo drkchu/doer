@@ -31,6 +31,7 @@
 
 .display {
     overflow: scroll;
+    height: 100%;
 }
 
 .task {
@@ -69,4 +70,11 @@
 .time-display {
     width: 8rem;
     text-align: center;
+}
+
+/* When there's no tasks to display */
+.empty-task {
+    text-align: center;
+    margin: auto auto;
+    margin: 25% 0;
 }

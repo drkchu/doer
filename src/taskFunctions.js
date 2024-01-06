@@ -39,7 +39,6 @@ export const domManager = (function() {
     
     function generateTaskElement(task) {
         const taskDiv = document.createElement('div');
-        console.log(task.priority);
         taskDiv.classList.add('task',
         'border-l-4',
         task.priority === 'high' ? 'border-l-red-800' :
@@ -91,6 +90,13 @@ export const domManager = (function() {
     function displayTasks(tasks) {
         const taskDisplay = document.querySelector('.display');
         resetContainer(taskDisplay);
+        if (tasks.length === 0) {
+            const emptyTaskDiv = document.createElement('div');
+            emptyTaskDiv.classList.add('empty-task');
+            emptyTaskDiv.textContent = "It's quiet here...";
+            taskDisplay.appendChild(emptyTaskDiv);
+            return;
+        }
         tasks.forEach(task => {
             var newTask = generateTaskElement(task);
             taskDisplay.appendChild(newTask);
