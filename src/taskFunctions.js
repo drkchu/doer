@@ -111,7 +111,7 @@ export const domManager = (function() {
         return taskDiv;
     }
 
-    function displayTasks(tasks, taskManager) {
+    function displayTasks(tasks) {
         const taskDisplay = document.querySelector('#display');
         resetContainer(taskDisplay);
         if (tasks.length === 0) {
