@@ -33,5 +33,69 @@ export const taskManager = (function() {
 })();
 
 export const domManager = (function() {
+    function resetContainer(element) {
+        element.textContent = '';
+    }
     
+    function generateTaskElement(task) {
+        const taskDiv = document.createElement('div');
+        console.log(task.priority);
+        taskDiv.classList.add('task',
+        'border-l-4',
+        task.priority === 'high' ? 'border-l-red-800' :
+            task.priority === 'medium' ? 'border-l-yellow-800' :
+                'border-l-green-800');
+        
+        const taskInfoLeftDiv = document.createElement('div');
+        taskInfoLeftDiv.classList.add('task-info-left');
+
+        const taskCheckInput = document.createElement('input');
+        taskCheckInput.type = 'checkbox';
+        taskCheckInput.classList.add('checkbox');
+
+        const taskTitleSpan = document.createElement('span');
+        taskTitleSpan.classList.add('task-title');
+        taskTitleSpan.textContent = task.title;
+
+        taskInfoLeftDiv.appendChild(taskCheckInput);
+        taskInfoLeftDiv.appendChild(taskTitleSpan);
+
+        const taskInfoRightDiv = document.createElement('div');
+        taskInfoRightDiv.classList.add('task-info-right');
+
+        const detailsButton = document.createElement('button');
+        detailsButton.classList.add('btn', 'btn-sm', 'border-green-500', 'btn-outline');
+        detailsButton.textContent = 'DETAILS';
+
+        const timeDisplaySpan = document.createElement('span');
+        timeDisplaySpan.classList.add('time-display');
+        timeDisplaySpan.textContent = 'September 30th';
+
+        const infoTaskIcon = document.createElement('i');
+        infoTaskIcon.classList.add('info-task', 'fa-solid', 'fa-pen-to-square');
+
+        const deleteTaskIcon = document.createElement('i');
+        deleteTaskIcon.classList.add('delete-task', 'fa-solid', 'fa-trash');
+
+        taskInfoRightDiv.appendChild(detailsButton);
+        taskInfoRightDiv.appendChild(timeDisplaySpan);
+        taskInfoRightDiv.appendChild(infoTaskIcon);
+        taskInfoRightDiv.appendChild(deleteTaskIcon);
+
+        taskDiv.appendChild(taskInfoLeftDiv);
+        taskDiv.appendChild(taskInfoRightDiv);
+
+        return taskDiv;
+    }
+
+    function displayTasks(tasks) {
+        const taskDisplay = document.querySelector('.display');
+        resetContainer(taskDisplay);
+        tasks.forEach(task => {
+            var newTask = generateTaskElement(task);
+            taskDisplay.appendChild(newTask);
+        });
+    }
+
+    return { displayTasks };
 })();

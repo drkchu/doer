@@ -11,7 +11,7 @@
         <nav class="sidebar">
             <ul class="menu menu-lg bg-base-300">
                 <li><a class="active">All Tasks</a></li>
-                <li>
+                <li class="date-task-container">
                     <h2 class="menu-title">By Date</h2>
                     <ul>
                         <li><a>Today</a></li>
@@ -19,7 +19,7 @@
                         <li><a>Month</a></li>
                     </ul>
                 </li>
-                <li>
+                <li class="project-task-container">
                     <h2 class="menu-title">Projects</h2>
                     <ul>
                       <li><a>Project 1</a></li>
@@ -32,10 +32,10 @@
         </nav>
         <div class="display bg-base-200">
             <!--Example of a task in the display-->
-            <div class="task border-l-4 border-l-red-800">
+            <div class="task border-l-4 border-l-yellow-800">
                 <div class="task-info-left">
                     <input type="checkbox" class="checkbox"/>
-                    <span>Go to the gym</span>
+                    <span class="task-title">Go to the gym</span>
                 </div>
                 <div class="task-info-right">
                     <button class="btn btn-sm border-green-500 btn-outline">DETAILS</button>
@@ -46,10 +46,10 @@
             </div>
 
             <!--Here's another of a task in the display-->
-            <div class="task border-l-4 border-l-red-800">
+            <div class="task border-l-4 border-l-green-800">
                 <div class="task-info-left">
                     <input type="checkbox" class="checkbox"/>
-                    <span>Go to the gym</span>
+                    <span class="task-title">Go to the gym again</span>
                 </div>
                 <div class="task-info-right">
                     <button class="btn btn-sm border-green-500 btn-outline">DETAILS</button>
