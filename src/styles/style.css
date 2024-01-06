@@ -89,6 +89,14 @@
     background-color: green;
 }
 
+.project-task-container {
+    height: 20rem; /* This won't be great when resizing but it's fine for now */
+    max-height: 20rem;
+}
+
+.projects-list {
+    overflow-y: auto;
+}
 /* When there's no tasks to display */
 .empty-task {
     text-align: center;
