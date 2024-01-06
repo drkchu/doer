@@ -22,6 +22,16 @@ export const taskManager = (function() {
         return allTasks;
     }
 
-    return { createNewTask, getAllTasks}; // these are the functions that I want available in index.js
+    function generateDefaultTasks() { // For testing
+        createNewTask('Go to the gym', 'Do some squats and bench press', 'Gym', new Date(), 'low', false);
+        createNewTask('Review 3D integrals', 'Chapter 18', 'School', new Date(2024, 0, 12), 'medium', true);
+        createNewTask('Clean kitchen', 'Oven needs a thorough cleaning', '', new Date(2024, 0, 10), 'high', false);
+    }
 
+    return { generateDefaultTasks, createNewTask, getAllTasks};
+
+})();
+
+export const domManager = (function() {
+    
 })();

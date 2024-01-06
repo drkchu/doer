@@ -1,14 +1,9 @@
 /** STYLES */
 import './styles/style.css';
 
-import {taskManager} from './taskFunctions.js';
+import {taskManager, domManager} from './taskFunctions.js';
 
-taskManager.createNewTask("New Task",
- "This is the description",
- "School",
- new Date(),
- "low",
- false
- )
  
+taskManager.generateDefaultTasks();
+
 console.log(taskManager.getAllTasks());

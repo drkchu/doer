@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import '@fortawesome/fontawesome-free/css/all.css';
+
 #content {
     height: 100vh;
     width: 100vw;
@@ -23,10 +25,48 @@
     height: 100%;
 }
 
-.new-task-button {
+.create-button {
     margin: auto auto;
 }
 
 .display {
-    background-color: blue;
+    overflow: scroll;
+}
+
+.task {
+    display: flex;
+    align-items: center;
+    margin: 10px;
+    height: 3rem;
+    justify-content: space-between;
+    padding: 0 1.5rem;
+}
+
+.task:hover {
+    background-color: rgba(47, 53, 60, 0.3);
+}
+
+.task-info-left,
+.task-info-right {
+    display: flex;
+    align-items: center;
+}
+
+.task-info-left {
+    gap: 1rem;
+}
+
+.task-info-right {
+    gap: 2rem;
+}
+
+.delete-task:hover,
+.info-task:hover {
+    cursor: pointer;
+    color: gray;
+}
+
+.time-display {
+    width: 8rem;
+    text-align: center;
 }
