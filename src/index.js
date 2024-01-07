@@ -3,7 +3,13 @@ import './styles/style.css';
 
 import {taskManager, domManager} from './taskFunctions.js';
 
-taskManager.generateDefaultTasks();                 // generate
+// Since webpack bundles JS, it wraps all the individual files/modules in functions
+// so they are no longer run in the global scope, saying the following line means
+// I can still access taskManager in the console
+
+window.taskManager = taskManager; // delete in production build
+
+taskManager.generateDefaultTasks();
 domManager.updateDisplay(taskManager);
 
 // Iterate through all tasks, based on taskManager isActive. 

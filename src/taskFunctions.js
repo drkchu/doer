@@ -93,6 +93,16 @@ export const domManager = (function() {
         const detailsButton = document.createElement('button');
         detailsButton.classList.add('details-button', 'btn', 'btn-sm', 'border-green-500', 'btn-outline');
         detailsButton.textContent = 'DETAILS';
+        detailsButton.addEventListener('click', () => {
+            const modal = document.getElementById('task-details');
+            document.querySelector('.modal-task-title').textContent = `Title: ${task.title}`;
+            document.querySelector('.modal-task-description').textContent = `Description: ${task.description}`;
+            document.querySelector('.modal-task-project').textContent = `Project: ${task.project}`;
+            document.querySelector('.modal-task-date').textContent = `Date: ${format(task.dueDate, 'MMMM do, yyyy')}`;
+            document.querySelector('.modal-task-priority').textContent = `Priority: ${task.priority}`;
+            document.querySelector('.modal-task-checked').textContent = `Checked: ${task.checked}`;
+            modal.showModal();
+        })
 
         const timeDisplaySpan = document.createElement('span');
         timeDisplaySpan.classList.add('time-display');
