@@ -24,56 +24,29 @@
                     <ul>
                       <li><a>Project 1</a></li>
                       <li><a>Project 2</a></li>
-                      <li><a>Project 3</a></li>
+                      <li><a>Project 3</a></li> 
                     </ul>
                 </li>
                 <button type="submit" class="btn btn-ghost create-button">Add a Task or Project</button>
               </ul>
         </nav>
-        <div class="bg-base-200" id="display">
-            <!--Example of a task in the display-->
-            <!-- <div class="task low border-l-4 border-l-red-800">
-                <div class="task-info-left">
-                    <input type="checkbox" class="checkbox"/>
-                    <span class="task-title">Go to the gym</span>
-                </div>
-                <div class="task-info-right">
-                    <button class="btn btn-sm border-green-500 btn-outline">DETAILS</button>
-                    <span class="time-display">September 30th</span>
-                    <i class="info-task fa-solid fa-pen-to-square"></i>
-                    <i class="delete-task fa-solid fa-trash"></i>
-                </div>
-            </div> -->
-
-            <!--Here's another of a task in the display-->
-            <!-- <div class="task medium border-l-4 border-l-green-800">
-                <div class="task-info-left">
-                    <input type="checkbox" class="checkbox"/>
-                    <span class="task-title">Go to the gym again</span>
-                </div>
-                <div class="task-info-right">
-                    <button class="btn btn-sm border-green-500 btn-outline">DETAILS</button>
-                    <span class="time-display">May 4th</span>
-                    <i class="info-task fa-solid fa-pen-to-square"></i>
-                    <i class="delete-task fa-solid fa-trash"></i>
-                </div>
-            </div> -->
-
-            <!--Here's one last task in the display-->
-            <!-- <div class="task high border-l-4 border-yellow-green-800">
-                <div class="task-info-left">
-                    <input type="checkbox" class="checkbox"/>
-                    <span class="task-title">Go to the gym one last time</span>
-                </div>
-                <div class="task-info-right">
-                    <button class="btn btn-sm border-green-500 btn-outline">DETAILS</button>
-                    <span class="time-display">May 4th</span>
-                    <i class="info-task fa-solid fa-pen-to-square"></i>
-                    <i class="delete-task fa-solid fa-trash"></i>
-                </div>
-            </div> -->
-            
+        <div class="bg-base-200" id="display">              
         </div>
     </div>
+
+    <!-- Modal for task details-->
+    <dialog id="task-details" class="modal">
+        <div class="modal-box">
+            <h3 class="modal-task-title font-bold text-lg"></h3>
+            <h3 class="modal-task-description font-bold text-lg"></h3>
+            <h3 class="modal-task-project font-bold text-lg"></h3>
+            <h3 class="modal-task-date font-bold text-lg"></h3>
+            <h3 class="modal-task-priority font-bold text-lg"></h3>
+            <h3 class="modal-task-checked font-bold text-lg"></h3>
+        </div>
+        <form method="dialog" class="modal-backdrop">
+            <button>Close</button>
+        </form>
+    </dialog>
 </body>
 </html>
