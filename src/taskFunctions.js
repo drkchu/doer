@@ -64,9 +64,11 @@ export const taskManager = (function() {
 
     function deleteTask(index) {
         const deletedTasks = allTasks.splice(index, 1);
-        if (getAllTasks().filter((task) => task.project === deletedTasks[0].project).length === 0) {
-            removeProject(deletedTasks[0].project);
-        }
+
+        // Uncomment this next block if code if I want to delete the project if there are no projects inside
+        // if (getAllTasks().filter((task) => task.project === deletedTasks[0].project).length === 0) {
+        //     removeProject(deletedTasks[0].project);
+        // }
     }
 
     function removeProject(projectToRemove) {
@@ -151,6 +153,7 @@ export const domManager = (function() {
             defaultOption.disabled = true;
             defaultOption.selected = task.project === '' ? true : false;
             defaultOption.textContent = 'Select a project';
+            defaultOption.value = -1; // Signal that no project was chosen
             projectSelection.appendChild(defaultOption);
 
             taskManager.getAllProjects().forEach(project => {
@@ -161,7 +164,24 @@ export const domManager = (function() {
             });
 
             // Update the submit button with a function to update the task with  
-            // DO THIS LATER TONIGHT
+            const saveChangesButton = document.querySelector('.save-changes-button');
+            saveChangesButton.addEventListener('click', () => {
+                // Update the task based on the current information
+
+                task.title = document.querySelector('.title-input').value;
+                task.description = document.querySelector('.description-input').value;
+
+                const [year, month, date] = document.querySelector('.date-input').value.split('-');
+                task.dueDate = new Date(year, month - 1, date);
+
+                task.project = document.querySelector('.project-select').value;
+                task.priority = document.querySelector('input[name="priority"]:checked').value;
+                
+                // Update the display
+                updateDisplay(taskManager);
+
+            })
+
             modal.showModal();
         });
 
