@@ -31,8 +31,9 @@
               </ul>
         </nav>
         <div class="bg-base-200" id="display">  
-            <!-- <input type="checkbox" checked="checked" class="checkbox" />
-            <button class="btn btn-outline btn-primary">Primary</button>             -->
+            <!--So that tailwind doesn't ignore-->
+            <input type="checkbox" checked="checked" class="checkbox" />
+            <button class="btn btn-outline btn-primary">Primary</button>
         </div>
     </div>
     <!-- Modal for task details-->
@@ -48,6 +49,40 @@
         <form method="dialog" class="modal-backdrop">
             <button>Close</button>
         </form>
+    </dialog>
+    <!--Modal for editing task-->
+    <dialog id="edit-task" class="modal modal-bottom sm:modal-middle">
+        <div class="modal-box">
+            <form class="edit-task-form" method="dialog">
+                <div class="form-row h-full">
+                    <input required type="text" placeholder="Title" class="input input-ghost w-1/2 max-w-xs" />
+                    <input required type="date" class="form-date bg-inherit"/>
+                </div>
+                <textarea class="textarea" placeholder="Description"></textarea>
+                <div class="form-row">
+                    <select class="select w-2/5 max-w-xs">
+                        <option disabled selected>No Project</option>
+                        <option>Edit</option>
+                        <option>These</option>
+                        <option>Based</option>
+                        <option>Available</option>
+                        <option>Projects</option>
+                    </select>
+                    <div class="priority-inputs">
+                        <label for="radio-low">Low</label>
+                        <input required type="radio" id="radio-low" name="priority" class="radio radio-success" value="low" />
+                        
+                        <label for="radio-medium">Medium</label>
+                        <input type="radio" id="radio-medium" name="priority" class="radio radio-warning" value="medium" />
+                        
+                        <label for="radio-high">High</label>
+                        <input type="radio" id="radio-high" name="priority" class="radio radio-error" value="high" />
+                    </div>
+                </div>
+                <!-- if there is a button in form, it will close the modal -->
+                <button class="btn btn-block" type="submit">Save Changes</button>
+            </form>
+        </div>
     </dialog>
 </body>
 </html>

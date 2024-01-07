@@ -99,7 +99,7 @@ export const domManager = (function() {
 
         const detailsButton = document.createElement('button');
         detailsButton.classList.add('details-button', 'btn', 'btn-sm', 'border-green-500', 'btn-outline');
-        detailsButton.textContent = 'DETAILS';
+        detailsButton.textContent = 'Details';
         detailsButton.addEventListener('click', () => {
             const modal = document.getElementById('task-details');
             document.querySelector('.modal-task-title').textContent = `Title: ${task.title}`;
@@ -115,8 +115,17 @@ export const domManager = (function() {
         timeDisplaySpan.classList.add('time-display');
         timeDisplaySpan.textContent = `${format(task.dueDate, 'MMMM do, yyyy')}`;
 
-        const infoTaskIcon = document.createElement('i');
-        infoTaskIcon.classList.add('info-task', 'fa-solid', 'fa-pen-to-square');
+        const editTaskIcon = document.createElement('i');
+        editTaskIcon.classList.add('edit-task', 'fa-solid', 'fa-pen-to-square');
+        editTaskIcon.addEventListener('click', () => {
+            const modal = document.getElementById('edit-task');
+            
+            // Update the modal to hold the current tasks stuff
+            
+            // Update the submit button with a function to update the task with  
+
+            modal.showModal();
+        });
 
         const deleteTaskIcon = document.createElement('i');
         deleteTaskIcon.classList.add('delete-task', 'fa-solid', 'fa-trash');
@@ -127,7 +136,7 @@ export const domManager = (function() {
 
         taskInfoRightDiv.appendChild(detailsButton);
         taskInfoRightDiv.appendChild(timeDisplaySpan);
-        taskInfoRightDiv.appendChild(infoTaskIcon);
+        taskInfoRightDiv.appendChild(editTaskIcon);
         taskInfoRightDiv.appendChild(deleteTaskIcon);
 
         taskDiv.appendChild(taskInfoLeftDiv);
