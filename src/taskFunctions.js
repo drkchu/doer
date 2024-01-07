@@ -58,7 +58,11 @@ export const taskManager = (function() {
         allTasks.splice(index, 1);
     }
 
-    return { generateDefaultTasks, createNewTask, getAllTasks, getCurrentDisplay, setCurrentDisplay, isActive, deleteTask };
+    function checkTask(task) {
+        task.checked = !task.checked;
+    }
+
+    return { generateDefaultTasks, createNewTask, getAllTasks, getCurrentDisplay, setCurrentDisplay, isActive, deleteTask, checkTask };
 
 })();
 
@@ -69,16 +73,19 @@ export const domManager = (function() {
     
     function generateTaskElement(task, index, taskManager) {
         const taskDiv = document.createElement('div');
-        taskDiv.classList.add('task',
-        'border-l-4',
-        task.priority);
+        taskDiv.classList.add('task', task.priority);
         
         const taskInfoLeftDiv = document.createElement('div');
         taskInfoLeftDiv.classList.add('task-info-left');
 
         const taskCheckInput = document.createElement('input');
         taskCheckInput.type = 'checkbox';
+        taskCheckInput.checked = task.checked;
         taskCheckInput.classList.add('checkbox');
+
+        taskCheckInput.addEventListener('click', () => {
+            taskManager.checkTask(task);
+        });
 
         const taskTitleSpan = document.createElement('span');
         taskTitleSpan.classList.add('task-title');
@@ -106,7 +113,7 @@ export const domManager = (function() {
 
         const timeDisplaySpan = document.createElement('span');
         timeDisplaySpan.classList.add('time-display');
-        timeDisplaySpan.textContent = 'September 30th';
+        timeDisplaySpan.textContent = `${format(task.dueDate, 'MMMM do, yyyy')}`;
 
         const infoTaskIcon = document.createElement('i');
         infoTaskIcon.classList.add('info-task', 'fa-solid', 'fa-pen-to-square');
