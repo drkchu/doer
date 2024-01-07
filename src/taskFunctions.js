@@ -1,7 +1,8 @@
-import { compareAsc, format } from "date-fns"; 
+import { compareAsc, format, getDate, getMonth, getYear } from "date-fns"; 
 
 export const taskManager = (function() {
     const allTasks = [];
+    let projects = [];
 
     let currentDisplay = 'all'; // default to displaying all tasks from the start
 
@@ -18,10 +19,17 @@ export const taskManager = (function() {
 
     function createNewTask(title, description, project, dueDate, priority, checked = false) {
         allTasks.push(new Task(title, description, project, dueDate, priority, checked));
+        if (!projects.includes(project) && project !== '') {
+            projects.push(project);
+        }
     }
 
     function getAllTasks() {
         return allTasks;
+    }
+
+    function getAllProjects() {
+        return projects;
     }
 
     function generateDefaultTasks() { // For testing
@@ -55,14 +63,22 @@ export const taskManager = (function() {
     }
 
     function deleteTask(index) {
-        allTasks.splice(index, 1);
+        const deletedTasks = allTasks.splice(index, 1);
+        if (getAllTasks().filter((task) => task.project === deletedTasks[0].project).length === 0) {
+            removeProject(deletedTasks[0].project);
+        }
+    }
+
+    function removeProject(projectToRemove) {
+        projects = projects.filter((project) => project !== projectToRemove);
     }
 
     function checkTask(task) {
         task.checked = !task.checked;
     }
 
-    return { generateDefaultTasks, createNewTask, getAllTasks, getCurrentDisplay, setCurrentDisplay, isActive, deleteTask, checkTask };
+    return { generateDefaultTasks, createNewTask, getAllTasks, getCurrentDisplay, setCurrentDisplay,
+         isActive, deleteTask, checkTask, getAllProjects };
 
 })();
 
@@ -121,9 +137,31 @@ export const domManager = (function() {
             const modal = document.getElementById('edit-task');
             
             // Update the modal to hold the current tasks stuff
+            document.querySelector('.title-input').value = task.title;
+            document.querySelector('.date-input').value = format(task.dueDate, 'yyyy-MM-dd'); // yyyy-mm-dd
+            document.querySelector('.description-input').value = task.description; // yyyy-mm-dd
+            document.querySelector(`#radio-${task.priority}`).checked = true;
             
-            // Update the submit button with a function to update the task with  
+            // For the select element, I had to do some fancier stuff like looking up the current projects available
+            const projectSelection = document.querySelector('.project-select');
+            projectSelection.textContent = '';
+            
+            // Generate the default
+            const defaultOption = document.createElement('option');
+            defaultOption.disabled = true;
+            defaultOption.selected = task.project === '' ? true : false;
+            defaultOption.textContent = 'Select a project';
+            projectSelection.appendChild(defaultOption);
 
+            taskManager.getAllProjects().forEach(project => {
+                var newOption = document.createElement('option');
+                newOption.textContent = project;
+                newOption.selected = task.project === project ? true : false;
+                projectSelection.appendChild(newOption);
+            });
+
+            // Update the submit button with a function to update the task with  
+            // DO THIS LATER TONIGHT
             modal.showModal();
         });
 
