@@ -50,20 +50,24 @@ export const taskManager = (function() {
             case 'month':
                 return // implement later
             default:
-                return // this is a project, so filter based on the projects with the name
+                return task.project === currentDisplay;
         }
     }
 
-    return { generateDefaultTasks, createNewTask, getAllTasks, getCurrentDisplay, setCurrentDisplay, isActive };
+    function deleteTask(index) {
+        allTasks.splice(index, 1);
+    }
+
+    return { generateDefaultTasks, createNewTask, getAllTasks, getCurrentDisplay, setCurrentDisplay, isActive, deleteTask };
 
 })();
 
 export const domManager = (function() {
-    function resetContainer(element) {
-        element.textContent = '';
+    function clearDisplay() {
+        document.querySelector('#display').textContent = '';
     }
     
-    function generateTaskElement(task) {
+    function generateTaskElement(task, index, taskManager) {
         const taskDiv = document.createElement('div');
         taskDiv.classList.add('task',
         'border-l-4',
@@ -99,6 +103,10 @@ export const domManager = (function() {
 
         const deleteTaskIcon = document.createElement('i');
         deleteTaskIcon.classList.add('delete-task', 'fa-solid', 'fa-trash');
+        deleteTaskIcon.addEventListener('click', () => {
+            taskManager.deleteTask(index);
+            updateDisplay(taskManager);
+        })
 
         taskInfoRightDiv.appendChild(detailsButton);
         taskInfoRightDiv.appendChild(timeDisplaySpan);
@@ -111,21 +119,33 @@ export const domManager = (function() {
         return taskDiv;
     }
 
-    function displayTasks(tasks) {
+    function addTaskToDisplay(task, index, taskManager) {
         const taskDisplay = document.querySelector('#display');
-        resetContainer(taskDisplay);
-        if (tasks.length === 0) {
-            const emptyTaskDiv = document.createElement('div');
-            emptyTaskDiv.classList.add('empty-task');
-            emptyTaskDiv.textContent = "It's quiet here...";
-            taskDisplay.appendChild(emptyTaskDiv);
+        const newTaskElement = generateTaskElement(task, index, taskManager);
+        taskDisplay.appendChild(newTaskElement);
+    }
+
+    function displayEmptyMessage() {
+        const taskDisplay = document.querySelector('#display');
+        const emptyTaskDiv = document.createElement('div');
+        emptyTaskDiv.classList.add('empty-task');
+        emptyTaskDiv.textContent = "It's quiet here...";
+        taskDisplay.appendChild(emptyTaskDiv);
+    }
+
+    function updateDisplay(taskManager) {
+        clearDisplay();
+
+        if (taskManager.getAllTasks().filter(taskManager.isActive).length === 0) {
+            displayEmptyMessage();
             return;
         }
-        tasks.forEach((task) => {
-            var newTask = generateTaskElement(task);
-            taskDisplay.appendChild(newTask);
+
+        taskManager.getAllTasks().forEach((task, index) => {
+            if (taskManager.isActive(task))
+                addTaskToDisplay(task, index, taskManager);
         });
     }
 
-    return { displayTasks };
+    return { updateDisplay };
 })();
