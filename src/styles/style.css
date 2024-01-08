@@ -113,7 +113,8 @@
     overflow-y: auto;
 }
 
-.edit-task-form {
+.edit-task-form,
+.create-task-form {
     display: flex;
     flex-direction: column;
     gap: 2rem;

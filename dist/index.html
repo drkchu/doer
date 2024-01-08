@@ -11,7 +11,7 @@
         <header class="header-2 text-6xl font-bold text-white-900"></header>
         <nav class="sidebar">
             <ul class="menu menu-lg bg-base-300">
-                <li><a class="all-tab">All Tasks</a></li>
+                <li><a class="all-tab active">All Tasks</a></li>
                 <li class="date-task-container">
                     <h2 class="menu-title">By Date</h2>
                     <ul>
@@ -28,13 +28,14 @@
                       <li><a class="project-tab">Project 3</a></li> 
                     </ul>
                 </li>
-                <button type="submit" class="btn btn-ghost create-button">Add a new Task</button>
+                <button type="submit" class="add-task-button btn btn-ghost create-button">Add a new Task</button>
               </ul>
         </nav>
         <div class="bg-base-200" id="display">  
             <!--So that tailwind doesn't ignore-->
             <input type="checkbox" checked="checked" class="checkbox" />
             <button class="btn btn-outline btn-primary">Primary</button>
+            <!--Updated by whatever's in storage so it's redundant-->
         </div>
     </div>
 
@@ -85,6 +86,42 @@
                 </div>
                 <!-- if there is a button in form, it will close the modal -->
                 <button class="save-changes-button btn btn-block" type="submit">Save Changes</button>
+            </form>
+        </div>
+    </dialog>
+
+    <!--Modal for creating a task-->
+    <dialog id="create-task" class="modal modal-bottom sm:modal-middle">
+        <div class="modal-box">
+            <form class="create-task-form" method="dialog">
+                <div class="form-row h-full">
+                    <input required type="text" placeholder="Title" class="title-input-create input input-ghost w-1/2 max-w-xs" />
+                    <input required type="date" class="date-input-create form-date bg-inherit"/>
+                </div>
+                <textarea class="textarea description-input-create" placeholder="Description"></textarea>
+                <div class="form-row">
+                    <input type="text" list="available-projects" placeholder="Choose a project" class="project-input-create input w-2/5 max-w-xs"/>
+                    <datalist id="available-projects">
+                        <option value="Populate"></option>
+                        <option value="Based"></option>
+                        <option value="On"></option>
+                        <option value="Available"></option>
+                        <option value="Projects"></option>
+                    </datalist>
+            
+                    <div class="priority-inputs">
+                        <label for="radio-low">Low</label>
+                        <input required type="radio" id="radio-low" name="priority-create" class="radio radio-success" value="low" />
+                        
+                        <label for="radio-medium">Medium</label>
+                        <input type="radio" id="radio-medium" name="priority-create" class="radio radio-warning" value="medium" />
+                        
+                        <label for="radio-high">High</label>
+                        <input type="radio" id="radio-high" name="priority-create" class="radio radio-error" value="high" />
+                    </div>
+                </div>
+                <!-- if there is a button in form, it will close the modal -->
+                <button class="create-task-button btn btn-block" type="submit">Create Task!</button>
             </form>
         </div>
     </dialog>

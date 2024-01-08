@@ -9,8 +9,8 @@ import {taskManager, domManager} from './taskFunctions.js';
 
 window.taskManager = taskManager; // delete in production build
 
-// Get local date or generate tasks
-
+// Get local tasks or generate tasks
 taskManager.generateDefaultTasks();
-domManager.linkNavBar(taskManager);
+
+domManager.linkNavBar(taskManager); // Get's the nav bar looking right
 domManager.updateTaskDisplay(taskManager);
