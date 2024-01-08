@@ -100,12 +100,12 @@
     background-color: var(--details-highlight);
 }
 
-.project-task-container {
-    height: 20rem; /* This won't be great when resizing but it's fine for now */
-    max-height: 20rem;
+.project-container-container {
+    height: 18rem; /* This won't be great when resizing but it's fine for now */
 }
 
-.projects-list {
+.project-container {
+    max-height: 18rem;
     overflow-y: auto;
 }
 

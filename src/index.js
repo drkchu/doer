@@ -9,10 +9,8 @@ import {taskManager, domManager} from './taskFunctions.js';
 
 window.taskManager = taskManager; // delete in production build
 
-taskManager.generateDefaultTasks();
-domManager.updateDisplay(taskManager);
+// Get local date or generate tasks
 
-// Iterate through all tasks, based on taskManager isActive. 
-// If we got an active one, add it to the display after resetting using domManager
-// Make sure to link the appropriate buttons based on the index from taskManager
-// Create functions that open the details / edit / delete buttons
+taskManager.generateDefaultTasks();
+domManager.linkNavBar(taskManager);
+domManager.updateTaskDisplay(taskManager);

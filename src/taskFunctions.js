@@ -1,10 +1,12 @@
-import { compareAsc, format, getDate, getMonth, getYear } from "date-fns"; 
+import { add, format, isWithinInterval, isSameDay} from "date-fns"; 
+
 
 export const taskManager = (function() {
     const allTasks = [];
     let projects = [];
 
     let currentDisplay = 'all'; // default to displaying all tasks from the start
+    let currentProject = '';
 
     class Task {
         constructor(title, description, project, dueDate, priority, checked = false) {
@@ -33,32 +35,61 @@ export const taskManager = (function() {
     }
 
     function generateDefaultTasks() { // For testing
-        createNewTask('Go to the gym', 'Do some squats and bench press', 'Gym', new Date(), 'low', false);
-        createNewTask('Review 3D integrals', 'Chapter 18', 'School', new Date(2024, 0, 12), 'medium', true);
-        createNewTask('Clean kitchen', 'Oven needs a thorough cleaning', '', new Date(2024, 0, 10), 'high', false);
+        createNewTask('Go to the gym', 'Do some squats and bench press', 'Gym', new Date(), 'low', true);
+        createNewTask('Review 3D integrals', 'Chapter 18', 'School', add(new Date(), {
+            days: 6,
+        }), 'medium', true);
+        createNewTask('Clean kitchen', 'Oven needs a thorough cleaning', '', add(new Date(), {
+            days: 1,
+        }), 'high', false);
+        createNewTask('Data Structures Final Exam', 'Room 3030 @ 9am', 'School', add(new Date(), {
+            weeks: 2,
+        }), 'high', false);
+        createNewTask('Japan Vacation', 'With Jay', 'Vacation', add(new Date(), {
+            weeks: 2,
+            months: 3,
+            days: 12,
+        }), 'medium', false);
+        createNewTask('Get a cool job', 'Something that fulfilling and makes me a lot of money', 'Career', add(new Date(), {
+            days: 10,
+            months: 4,
+            years: 2,
+        }), 'low', false);
     }
     
     function getCurrentDisplay() {
         return currentDisplay;
     }
 
+    function getCurrentProject() {
+        return currentProject;
+    }
+
     function setCurrentDisplay(newDisplay) {
         currentDisplay = newDisplay;
     }
 
+    function setCurrentProject(newProject) {
+        currentProject = newProject;
+    }
+
     // Returns a boolean based on whether or not the current task is active and should be displayed
     function isActive(task) {
+        const today = new Date();
+        const oneWeekLater = add(today, {days: 7});
+        const oneMonthLater = add(today, {months: 1});
+
         switch (currentDisplay) {
             case 'all':
                 return true;
             case 'today':
-                return // implement later
+                return isSameDay(task.dueDate, today);
             case 'week':
-                return // implement later
+                return isWithinInterval(task.dueDate, { start: today, end: oneWeekLater });
             case 'month':
-                return // implement later
+                return isWithinInterval(task.dueDate, { start: today, end: oneMonthLater });
             default:
-                return task.project === currentDisplay;
+                return task.project === getCurrentProject();
         }
     }
 
@@ -79,8 +110,8 @@ export const taskManager = (function() {
         task.checked = !task.checked;
     }
 
-    return { generateDefaultTasks, createNewTask, getAllTasks, getCurrentDisplay, setCurrentDisplay,
-         isActive, deleteTask, checkTask, getAllProjects };
+    return { generateDefaultTasks, createNewTask, getAllTasks, getCurrentDisplay, getCurrentProject, setCurrentDisplay,
+         isActive, deleteTask, checkTask, getAllProjects, setCurrentProject };
 
 })();
 
@@ -136,7 +167,7 @@ export const domManager = (function() {
         const editTaskIcon = document.createElement('i');
         editTaskIcon.classList.add('edit-task', 'fa-solid', 'fa-pen-to-square');
         editTaskIcon.addEventListener('click', () => {
-            const modal = document.getElementById('edit-task');
+            const editTaskModal = document.getElementById('edit-task');
             
             // Update the modal to hold the current tasks stuff
             document.querySelector('.title-input').value = task.title;
@@ -159,6 +190,7 @@ export const domManager = (function() {
             taskManager.getAllProjects().forEach(project => {
                 var newOption = document.createElement('option');
                 newOption.textContent = project;
+                newOption.value = project;
                 newOption.selected = task.project === project ? true : false;
                 projectSelection.appendChild(newOption);
             });
@@ -167,29 +199,28 @@ export const domManager = (function() {
             const saveChangesButton = document.querySelector('.save-changes-button');
             saveChangesButton.addEventListener('click', () => {
                 // Update the task based on the current information
-
                 task.title = document.querySelector('.title-input').value;
                 task.description = document.querySelector('.description-input').value;
 
                 const [year, month, date] = document.querySelector('.date-input').value.split('-');
                 task.dueDate = new Date(year, month - 1, date);
 
-                task.project = document.querySelector('.project-select').value;
+                task.project = document.querySelector('.project-select').value === -1 || '' ? 
+                    '' : document.querySelector('.project-select').value;
                 task.priority = document.querySelector('input[name="priority"]:checked').value;
                 
                 // Update the display
-                updateDisplay(taskManager);
-
+                updateTaskDisplay(taskManager);
             })
 
-            modal.showModal();
+            editTaskModal.showModal();
         });
 
         const deleteTaskIcon = document.createElement('i');
         deleteTaskIcon.classList.add('delete-task', 'fa-solid', 'fa-trash');
         deleteTaskIcon.addEventListener('click', () => {
             taskManager.deleteTask(index);
-            updateDisplay(taskManager);
+            updateTaskDisplay(taskManager);
         })
 
         taskInfoRightDiv.appendChild(detailsButton);
@@ -217,7 +248,7 @@ export const domManager = (function() {
         taskDisplay.appendChild(emptyTaskDiv);
     }
 
-    function updateDisplay(taskManager) {
+    function updateTaskDisplay(taskManager) {
         clearDisplay();
 
         if (taskManager.getAllTasks().filter(taskManager.isActive).length === 0) {
@@ -231,5 +262,74 @@ export const domManager = (function() {
         });
     }
 
-    return { updateDisplay };
+    // Links all tabs to in the nav bar
+    function linkNavBar(taskManager) {
+        updateProjectsDisplay(taskManager);
+        const allTab = document.querySelector('.all-tab');
+        allTab.addEventListener('click', () => {
+            deactivateChildren(document.querySelector('.sidebar'));
+            allTab.classList.add('active');
+            taskManager.setCurrentDisplay('all');
+            updateTaskDisplay(taskManager);
+        });
+
+        const todayTab = document.querySelector('.today-tab');
+        todayTab.addEventListener('click', () => {
+            deactivateChildren(document.querySelector('.sidebar'));
+            todayTab.classList.add('active');
+            taskManager.setCurrentDisplay('today');
+            updateTaskDisplay(taskManager);
+        });
+
+        const weekTab = document.querySelector('.week-tab');
+        weekTab.addEventListener('click', () => {
+            deactivateChildren(document.querySelector('.sidebar'));
+            weekTab.classList.add('active');
+            taskManager.setCurrentDisplay('week');
+            updateTaskDisplay(taskManager);
+        });
+
+        const monthTab = document.querySelector('.month-tab');
+        monthTab.addEventListener('click', () => {
+            deactivateChildren(document.querySelector('.sidebar'));
+            monthTab.classList.add('active');
+            taskManager.setCurrentDisplay('month');
+            updateTaskDisplay(taskManager);
+        });
+
+        const allProjectTabs = document.querySelectorAll('.project-tab');
+        allProjectTabs.forEach((projectTab)  => {
+            projectTab.addEventListener('click', () => {
+                deactivateChildren(document.querySelector('.sidebar'));
+                projectTab.classList.add('active');
+                taskManager.setCurrentDisplay('project');
+                taskManager.setCurrentProject(projectTab.textContent);
+                updateTaskDisplay(taskManager);
+            })
+        })
+
+    }  
+
+    // Just add the projects to the dom, don't worry about linking anything
+    function updateProjectsDisplay(taskManager) { 
+        const projectTaskContainer = document.querySelector('.project-container');
+        projectTaskContainer.textContent = '';
+        taskManager.getAllProjects().forEach((project) => {
+            var projectTabContainer = document.createElement('li');
+            var projectTab = document.createElement('a');
+            projectTab.textContent = project;
+            projectTab.classList.add('project-tab');
+            projectTabContainer.appendChild(projectTab);
+            projectTaskContainer.appendChild(projectTabContainer);
+        });
+    }
+
+    function deactivateChildren(parentContainer) {
+        const children = parentContainer.querySelectorAll('*');
+        children.forEach((child) => {
+            child.classList.remove('active');
+        })
+    }
+
+    return { updateTaskDisplay, linkNavBar };
 })();
