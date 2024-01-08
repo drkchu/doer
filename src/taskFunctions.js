@@ -210,7 +210,7 @@ export const domManager = (function() {
                 const edittedProject = document.querySelector('.project-select').value === -1 || '' ? 
                 '' : document.querySelector('.project-select').value;
 
-                if (taskManager.getAllTasks().filter((thisTask) => thisTask.project === task.project).length === 1) {
+                if (taskManager.getAllTasks().filter((thisTask) => thisTask.project === task.project && edittedProject !== task.project).length === 1) {
                     taskManager.removeProject(task.project);
                 }
                 task.project = edittedProject;
