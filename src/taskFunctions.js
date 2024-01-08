@@ -78,16 +78,16 @@ export const taskManager = (function() {
         const today = new Date();
         const oneWeekLater = add(today, {days: 7});
         const oneMonthLater = add(today, {months: 1});
-
-        switch (currentDisplay) {
+        
+        switch (currentDisplay) { // Checking for isSameDay in week/month case for precision errors?
             case 'all':
                 return true;
             case 'today':
                 return isSameDay(task.dueDate, today);
             case 'week':
-                return isWithinInterval(task.dueDate, { start: today, end: oneWeekLater });
+                return isSameDay(task.dueDate, today) || isWithinInterval(task.dueDate, { start: today, end: oneWeekLater });
             case 'month':
-                return isWithinInterval(task.dueDate, { start: today, end: oneMonthLater });
+                return isSameDay(task.dueDate, today) || isWithinInterval(task.dueDate, { start: today, end: oneMonthLater });
             default:
                 return task.project === getCurrentProject();
         }
@@ -96,10 +96,10 @@ export const taskManager = (function() {
     function deleteTask(index) {
         const deletedTasks = allTasks.splice(index, 1);
 
-        // Uncomment this next block if code if I want to delete the project if there are no projects inside
-        // if (getAllTasks().filter((task) => task.project === deletedTasks[0].project).length === 0) {
-        //     removeProject(deletedTasks[0].project);
-        // }
+        // WhetherI want to delete the project if there are no projects inside
+        if (getAllTasks().filter((task) => task.project === deletedTasks[0].project).length === 0) {
+            removeProject(deletedTasks[0].project);
+        }
     }
 
     function removeProject(projectToRemove) {
@@ -211,7 +211,7 @@ export const domManager = (function() {
                 
                 // Update the display
                 updateTaskDisplay(taskManager);
-            }, {once: true})
+            }, {once: true}) // w/o this line, I end up with duplicate tasks over time
 
             editTaskModal.showModal();
         });
@@ -221,6 +221,7 @@ export const domManager = (function() {
         deleteTaskIcon.addEventListener('click', () => {
             taskManager.deleteTask(index);
             updateTaskDisplay(taskManager);
+            updateProjectsDisplay(taskManager);
         })
 
         taskInfoRightDiv.appendChild(detailsButton);
