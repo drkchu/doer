@@ -332,7 +332,7 @@ export const domManager = (function() {
 
                 const newPriority = document.querySelector('input[name="priority-create"]:checked').value;
                 
-                taskManager.createNewTask(newTitle, newDescription, newProject, new Date(newYear, newMonth, newDate), newPriority, false);
+                taskManager.createNewTask(newTitle, newDescription, newProject, new Date(newYear, (newMonth - 1), newDate), newPriority, false);
                 
 
 
