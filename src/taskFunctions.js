@@ -211,7 +211,7 @@ export const domManager = (function() {
                 
                 // Update the display
                 updateTaskDisplay(taskManager);
-            })
+            }, {once: true})
 
             editTaskModal.showModal();
         });
