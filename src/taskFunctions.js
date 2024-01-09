@@ -1,6 +1,5 @@
 import { add, format, isWithinInterval, isSameDay} from "date-fns"; 
 
-
 export const taskManager = (function() {
     const allTasks = [];
     let projects = [];
@@ -24,10 +23,34 @@ export const taskManager = (function() {
         if (!projects.includes(project) && project !== '') {
             projects.push(project);
         }
+        // Update the count for the number of tasks in localStorage
+        let totalTasks = localStorage.getItem("numTasks");
+        localStorage.setItem('numTasks', totalTasks === null ? 
+            1 : parseInt(totalTasks) + 1);
+        
+        // Add the task to the local storage
+        let currTaskIndex = localStorage.getItem('numTasks');
+        localStorage.setItem('title' + currTaskIndex, title);
+        localStorage.setItem('description' + currTaskIndex, description);
+        localStorage.setItem('project' + currTaskIndex, project);
+        localStorage.setItem('dueDate' + currTaskIndex, format(dueDate, 'yyyy-MM-dd'));
+        localStorage.setItem('priority' + currTaskIndex, priority);
+        localStorage.setItem('checked' + currTaskIndex, checked);
     }
 
     function deleteTask(index) {
+        // Remove the task from local storage
+        localStorage.removeItem('title' + (index + 1));
+        localStorage.removeItem('description' + (index + 1));
+        localStorage.removeItem('project' + (index + 1));
+        localStorage.removeItem('dueDate' + (index + 1));
+        localStorage.removeItem('priority' + (index + 1));
+        localStorage.removeItem('checked' + (index + 1));
+        localStorage.setItem('numTasks', parseInt(localStorage.getItem('numTasks')) - 1);
+
         const deletedTasks = allTasks.splice(index, 1);
+
+        updateLocalStorageIndices();
 
         // Comment this out if I want the project to remain even when there are no tasks associated
         if (getAllTasks().filter((task) => task.project === deletedTasks[0].project).length === 0) {
@@ -111,12 +134,30 @@ export const taskManager = (function() {
         task.checked = !task.checked;
     }
 
+    function updateLocalStorageIndices() { // Not ideal run time, but with this scale, won't be an issue
+        const totalTasks = allTasks.length;
+        localStorage.clear();
+        localStorage.setItem('numTasks', allTasks.length);
+
+        for (let index = 1; index <= totalTasks; index++) {
+            var currTask = allTasks[index - 1];
+            localStorage.setItem('title' + index, currTask.title);
+            localStorage.setItem('description' + index, currTask.description);
+            localStorage.setItem('project' + index, currTask.project);
+            localStorage.setItem('dueDate' + index, format(currTask.dueDate, 'yyyy-MM-dd'));
+            localStorage.setItem('priority' + index, currTask.priority);
+            localStorage.setItem('checked' + index, currTask.checked);
+        }
+    }
+
     return { generateDefaultTasks, createNewTask, getAllTasks, getCurrentDisplay, getCurrentProject, setCurrentDisplay,
-         isActive, deleteTask, checkTask, getAllProjects, setCurrentProject, removeProject };
+         isActive, deleteTask, checkTask, getAllProjects, setCurrentProject, removeProject, updateLocalStorageIndices };
 
 })();
 
 export const domManager = (function() {
+    let activeTaskIndex;
+
     function clearDisplay() {
         document.querySelector('#display').textContent = '';
     }
@@ -169,7 +210,7 @@ export const domManager = (function() {
         editTaskIcon.classList.add('edit-task', 'fa-solid', 'fa-pen-to-square');
         editTaskIcon.addEventListener('click', () => {
             const editTaskModal = document.getElementById('edit-task');
-            
+            activeTaskIndex = index;
             // Update the modal to hold the current tasks stuff
             document.querySelector('.title-input').value = task.title;
             document.querySelector('.date-input').value = format(task.dueDate, 'yyyy-MM-dd'); // yyyy-mm-dd
@@ -200,6 +241,9 @@ export const domManager = (function() {
             const saveChangesButton = document.querySelector('.save-changes-button');
             saveChangesButton.addEventListener('click', () => {
                 // Update the task based on the current information
+                if (activeTaskIndex !== index) // Fixes the cloning bug
+                    return;
+
                 task.title = document.querySelector('.title-input').value;
                 task.description = document.querySelector('.description-input').value;
 
@@ -220,6 +264,7 @@ export const domManager = (function() {
                 // Update the display
                 updateTaskDisplay(taskManager);
                 updateProjectsDisplay(taskManager);
+                taskManager.updateLocalStorageIndices();
             }, {once: true}) // w/o this line, I end up with duplicate tasks over time
 
             editTaskModal.showModal();
