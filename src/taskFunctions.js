@@ -33,7 +33,7 @@ export const taskManager = (function() {
         localStorage.setItem('title' + currTaskIndex, title);
         localStorage.setItem('description' + currTaskIndex, description);
         localStorage.setItem('project' + currTaskIndex, project);
-        localStorage.setItem('dueDate' + currTaskIndex, format(dueDate, 'yyyy-MM-dd'));
+        localStorage.setItem('dueDate' + currTaskIndex, dueDate);
         localStorage.setItem('priority' + currTaskIndex, priority);
         localStorage.setItem('checked' + currTaskIndex, checked);
     }
