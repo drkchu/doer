@@ -171,7 +171,7 @@ export const domManager = (function() {
 
         const taskCheckInput = document.createElement('input');
         taskCheckInput.type = 'checkbox';
-        taskCheckInput.checked = task.checked === 'true';
+        taskCheckInput.checked = task.checked;
         taskCheckInput.classList.add('checkbox');
 
         taskCheckInput.addEventListener('click', () => {

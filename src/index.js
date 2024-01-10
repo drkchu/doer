@@ -29,7 +29,7 @@ function generateTasks() {
                 localStorage.getItem('project' + index),
                 localStorage.getItem('dueDate' + index),
                 localStorage.getItem('priority' + index),
-                localStorage.getItem('checked' + index)   
+                localStorage.getItem('checked' + index) === 'true'   
             )
         }
     }
