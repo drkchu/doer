@@ -176,6 +176,7 @@ export const domManager = (function() {
 
         taskCheckInput.addEventListener('click', () => {
             taskManager.checkTask(task);
+            localStorage.setItem('checked' + (index + 1), task.checked);
         });
 
         const taskTitleSpan = document.createElement('span');
